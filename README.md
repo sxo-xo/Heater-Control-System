@@ -1,12 +1,16 @@
 # Heater-Control-System
 The goal is to simulate or build a basic embedded system that turns a "heater" on or off based on temperature thresholds.
 *simulator code and non simulator code to understand the changing of state and temperature is observed continuously.*
+
 In this page youll find various versions of the heater. Created 3 versions of the code.
 before that, in Wokwi, diagram.json is the single file that defines your entire virtual circuit—every component, its position, and every wire connection. When you place parts or route wires in the editor, Wokwi updates that JSON so it can recreate and simulate your exact hardware setup anytime or share it with others.
+
 Wokwi also includes a built‑in set of popular Arduino libraries (e.g. Wire, LiquidCrystal_I2C, DHT, FreeRTOS, BLE). To add anything else, open the Libraries panel, search the Arduino Library Manager for the one you need, click install, and then #include it in your sketch—just like on real hardware.
 First copy the diagram code into diagram.json file in wokwi
+
 THE BASIC HEATER:
 This sketch transforms an ESP32 into a self‐contained heater controller that continuously reads ambient temperature from a DHT22 sensor and uses simple thresholds to drive a relay, LEDs, a buzzer, and a 10‐segment bar graph. On each half‐second loop, it reads the latest temperature; if the reading fails, it simply retries. Depending on the temperature, it switches between five states—Overheat (≥ 45 °C, buzzer and red LED alert), Heating (< 20 °C, relay turns heater on), Stabilizing (20–28 °C, heater on with idle LED), Target OK (≈ 28 °C, heater off with idle LED), and Idle (heater off). The bar graph lights a proportional number of segments to visualize temperature, the LCD shows the numeric temperature and current state, and the serial port logs all values and status transitions. Through this loop, the system provides real‑time monitoring and automatic control of a simulated heater with clear visual and auditory feedback.
+
 NON STIMULATED HEATER:
 This program turns an ESP32 into a fully automated heater controller that reads real temperature from a DHT22 sensor every second (in tempTask), then makes control decisions in controlTask based on four thresholds—below 20 °C it enters “HEATING”; 20–28 °C it moves to “STABILIZING”; exactly 28 °C it shows “TARGET_OK”; above 45 °C it triggers “OVERHEAT.” In each state it drives a relay to switch the heater, lights appropriate LEDs (heater, idle, or overheat), sounds the buzzer if overheated, and updates a 10‑segment bargraph proportional to temperature. The LCD displays the numeric temperature and current state only when something changes, and every three seconds bleTask broadcasts the same status over a mock BLE serial line. All this happens concurrently thanks to FreeRTOS tasks, while loop() simply idles to keep the scheduler running. to change the temperature, youll have to change the value of temperature in the line:      "attrs": { "humidity": "0", "temperature": "2.3" } 
 
